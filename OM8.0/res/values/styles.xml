@@ -1,0 +1,15 @@
+<resources>
+
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <style name="AppTheme1" parent="AppBaseTheme">
+    </style>
+    <!-- 兼容主题 浅色主题 activity背景默认白色 字体默认黑色 -->
+
+</resources>

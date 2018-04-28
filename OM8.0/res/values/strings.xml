@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SharpTest</string>
+    <string name="quit">"Quit"</string>
+    <string name="test_title">"Please judge the test results"</string>
+    <string name="test_time">Now Time:</string>
+    <string name="test_result">Test Report</string>
+</resources>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <TextView
+        android:id="@+id/item_cameraid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="23sp"
+        android:textColor="@color/test_blue_press"
+        />
+
+    <TextView
+        android:id="@+id/item_success"
+        android:layout_alignBaseline="@id/item_cameraid"
+        android:layout_toRightOf="@id/item_cameraid"
+        android:paddingLeft="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="名字"
+        android:textSize="23sp"
+        android:textColor="@color/color_type_success"
+       />
+
+    <TextView
+        android:id="@+id/item_detail"
+        android:layout_below="@id/item_cameraid"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        />
+
+    <TextView
+        android:id="@+id/item_testresult"
+        android:layout_below="@id/item_detail"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textColor="@color/color_type_wrong"
+        />
+</RelativeLayout>

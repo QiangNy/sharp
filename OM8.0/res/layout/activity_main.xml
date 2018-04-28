@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="37dp"
+            android:max="10"/>
+
+        <Button
+            android:id="@+id/btn_open"
+            android:layout_below="@id/seekBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentRight="true"
+            android:text="Open File" />
+
+        <RadioGroup
+            android:id = "@+id/camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/seekBar"
+            android:layout_marginRight="30dp"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/btn_frontcamera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Front" />
+
+            <RadioButton
+                android:id="@+id/btn_rearcamera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rear" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/camera"
+            android:layout_marginLeft="10px"
+            android:layout_marginTop="35dp" />
+
+
+        <TextView
+            android:id="@+id/txt_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_below="@+id/btn_open"
+            android:layout_marginLeft="10dp" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/txt_result"
+            android:layout_centerHorizontal="true"
+            android:scaleType="matrix"
+            android:layout_margin="10dp"
+            android:layout_marginTop="20dp"
+            android:src="@android:color/darker_gray" />
+
+    </RelativeLayout>
+
+</LinearLayout>
