@@ -123,7 +123,7 @@ public class BackAsyncTask extends AsyncTask {
         if(isWhite) {
            return null;
         } else {
-            judeEveryLine();
+            judeEveryLines();
 
             checkAllResult();
         }
@@ -214,7 +214,32 @@ public class BackAsyncTask extends AsyncTask {
         }
     }
 
-    private void judeEveryLine() {
+    private void judeEveryLines() {
+        List<Pig> mList = Singleton.getInstance().getPigList();
+        int[] cRelexLines = new int[20];
+
+        for (Pig pig : mList) {
+            for (int m = 0; m < pig.getDegree().length; m++) {
+
+                if (pig.getCameraID().equals(BCamera1)) {
+                    cRelexLines = CSW1703.backRelexLines;
+                }else {
+                    cRelexLines = CSW1703.frontRelexLines;
+                }
+
+                if (pig.getDegree()[m] >= cRelexLines[m]) {
+                    //OK
+                    pig.setSuccess(0);
+                }else {
+                    //Fail
+                    pig.setSuccess(1);
+                    pig.setTestResult("the " + m + " line test Fail result=" + pig.getDegree()[m] + " < "+ cRelexLines[m]);
+                }
+                DswLog.d(TAG,"getSuceess="+pig.getSuccess()+ "m="+m );
+            }
+        }
+    }
+  /*  private void judeEveryLine() {
         List<Pig> mList = Singleton.getInstance().getPigList();
         int mRelexLine_15 = 0;
         int mRelexLine_19 = 0;
@@ -258,7 +283,7 @@ public class BackAsyncTask extends AsyncTask {
 
         }
 
-    }
+    }*/
 
     private int calculatePicture(String action,String path) {
 
@@ -340,9 +365,9 @@ public class BackAsyncTask extends AsyncTask {
 
         DswLog.d(TAG, "#### 2");
         if (action.equals(OPEN_CAMERA_ONE) || action.equals(OPEN_CAMERA_TWO)) {
-            SystemClock.sleep(2100);
+            SystemClock.sleep(3500);
         }else {
-            SystemClock.sleep(1500);
+            SystemClock.sleep(2500);
         }
 
         excuteEventAciton(KeyEvent.KEYCODE_CAMERA);
