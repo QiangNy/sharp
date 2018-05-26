@@ -12,7 +12,8 @@
 #define SCALE_IMAGE_WIDTH	       (1024)
 #define SCALE_IMAGE_HEIGHT	       (768)
 #define ORG_STEP		           (4)
-#define NORMALIZE_W_H              (45)
-#define USER_REGIONS_NUMBERS       (20)
-#define SHARPNESS_MAX_VALUE        (50.f)
+#define NORMALIZE_W_H              (40)
+#define SHARPNESS_CRITERIA_POINTS  (4)
+#define SHARPNESS_MAX_VALUE        (620.f)
+
 #endif //_CAMERATEST_

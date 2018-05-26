@@ -12,7 +12,7 @@ public class SharpnessEngine {
     public static final int SDK_Top = 0;
     public static final int SDK_Bottom = 1;
 
-    public native static int setMetricLabels(int[] anLabels);
+    public native static int setMetricLabels(int[] anLabels, int nRegions);
     public native static int getSharpnessValues(Bitmap srcImg, float threshold, int[] resultArray, int[] xPos, int[] yPos);
 
     static {

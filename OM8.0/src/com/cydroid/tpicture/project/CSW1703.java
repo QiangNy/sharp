@@ -35,6 +35,13 @@ public class CSW1703 {
             16, 20, 16, 20, 16, 20, 16, 20,
             22, 26, 26, 22, 26, 22, 22, 26 };
 
+    // 后置 v2
+    public static final int rMetricLabels_v2[] = {
+            20, 16, 20, 14, 20, 16, 16, 20,
+            20, 14, 16, 20, 20, 16, 14, 20,
+            20, 16, 16, 20, 14, 20, 16, 20,
+            22, 26, 22, 26, 26, 22, 22, 26 };
+
     public static final int mCameraIDs[] = { 1, 3};
     public static final float threshold = 0.5f;
     public static final int backRelexLine_15 = 1750;
@@ -56,5 +63,13 @@ public class CSW1703 {
         1600,1750,1750,1600,1600,
         1750,1750,1600,1600,1750,
         1750,2200,2200,2200,2200
+    };
+
+    //后摄只有前16个结果
+    public static final int backRelexLines_v2[] = {
+            1600,1600,1750,1750,1600,
+            1600,1750,1750,1600,1600,
+            1750,1750,1600,1600,1750,
+            1750,  0,  0,  0,  0
     };
 }

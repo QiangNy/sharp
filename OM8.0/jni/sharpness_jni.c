@@ -11,17 +11,20 @@
 
 #define  SDK_FAILED (-1)
 #define  LOG_TAG    "SharpnessJNI"
+#define  USER_REGIONS_NUMBERS 50
 #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 #define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 
+int g_nDefinedNumbers = 0;
 int CreateWorkImg(unsigned char* pbSrcImg, int nWidth, int nHeight, unsigned char** ppDstGrey);
 
-JNIEXPORT jint Java_com_cydroid_tpicture_SharpnessEngine_setMetricLabels(JNIEnv * env, jobject obj, jintArray nLabelArray)
+JNIEXPORT jint Java_com_cydroid_tpicture_SharpnessEngine_setMetricLabels(JNIEnv * env, jobject obj, jintArray nLabelArray, jint nUserRegions)
 {
     int ret;
 
     jint *pLabels = (*env)->GetIntArrayElements(env, nLabelArray, 0);
-    ret = setMetricLabels(pLabels);
+    ret = setMetricLabels(pLabels, nUserRegions);
+    g_nDefinedNumbers = nUserRegions;
 
     (*env)->ReleaseIntArrayElements(env, nLabelArray, pLabels,0);
     return ret;
@@ -32,9 +35,6 @@ JNIEXPORT jint Java_com_cydroid_tpicture_SharpnessEngine_getSharpnessValues(JNIE
 {
     AndroidBitmapInfo   info;
     void*               pixels;
-    int                 degree[USER_REGIONS_NUMBERS];
-    int                 xPos[USER_REGIONS_NUMBERS];
-    int                 yPos[USER_REGIONS_NUMBERS];
     int                 ret;
 
     if (xResultArray == NULL || xPosArray == NULL || yPosArray == NULL)
@@ -63,6 +63,11 @@ JNIEXPORT jint Java_com_cydroid_tpicture_SharpnessEngine_getSharpnessValues(JNIE
     }
 
     AndroidBitmap_unlockPixels(env, srcImg);
+    int nRegions = g_nDefinedNumbers;
+
+    int degree[USER_REGIONS_NUMBERS];
+    int xPos[USER_REGIONS_NUMBERS];
+    int yPos[USER_REGIONS_NUMBERS];
 
     memset(degree, 0, sizeof(degree));
     memset(xPos, 0, sizeof(xPos));
@@ -71,13 +76,13 @@ JNIEXPORT jint Java_com_cydroid_tpicture_SharpnessEngine_getSharpnessValues(JNIE
     ret = getSharpness(pbGreyImg, info.width, info.height, threshold, degree, xPos, yPos);
 
     int i;
-    for (i = 0; i < USER_REGIONS_NUMBERS; i++) prResult[i] = degree[i];
+    for (i = 0; i < g_nDefinedNumbers; i++) prResult[i] = degree[i];
 
     int j;
-    for (j = 0; j < USER_REGIONS_NUMBERS; j++) prXPos[j] = xPos[j];
+    for (j = 0; j < g_nDefinedNumbers; j++) prXPos[j] = xPos[j];
 
     int k;
-    for (k = 0; k < USER_REGIONS_NUMBERS; k++) prYPos[k] = yPos[k];
+    for (k = 0; k < g_nDefinedNumbers; k++) prYPos[k] = yPos[k];
 
     (*env)->ReleaseIntArrayElements(env, xResultArray, prResult, 0);
     (*env)->ReleaseIntArrayElements(env, xPosArray, prXPos, 0);

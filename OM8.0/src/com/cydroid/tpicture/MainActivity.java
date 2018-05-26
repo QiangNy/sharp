@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -40,29 +43,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     private float threshold = 0.5f;
     // The sample includes the 20 patterns.
     static final int PATTERN_NUMBERS = 20;
-
+    static final int PATTERN_NUMBERS1 = 16;
     // These matrices will be used to scale points of the image5
     Matrix matrix = new Matrix();
     Matrix savedMatrix = new Matrix();
 
     // The 3 states (events) which the user is trying to perform
-    private static final int NONE = 0;
-    private static final int DRAG = 1;
-    private static final int ZOOM = 2;
+    static final int NONE = 0;
+    static final int DRAG = 1;
+    static final int ZOOM = 2;
 
     private PowerManager mPowerManager;
     private PowerManager.WakeLock mWakeLock;
 
     int mode = NONE;
 
-    // size to draw border with the sharpness value
-    static final int DRAWABLE_OFFSET = 30;
-
     // these PointF objects are used to record the point(s) the user is touching
     PointF start = new PointF();
     PointF mid = new PointF();
     float oldDist = 1f;
-
+    int g_nPatterns;
 
 
     @Override
@@ -105,8 +105,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     private void initData() {
-        setMetric4Camera(BigUtil.getfMetricLabels());
-
+        setMetric4Camera(BigUtil.getfMetricLabels(), PATTERN_NUMBERS);
+        g_nPatterns = PATTERN_NUMBERS;
         //regist listen
         Singleton.getInstance().setmPictureListenner(this);
 
@@ -173,10 +173,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         switch (view.getId())
         {
             case R.id.btn_frontcamera:
-                setMetric4Camera(BigUtil.getfMetricLabels());
+                setMetric4Camera(BigUtil.getfMetricLabels(),PATTERN_NUMBERS);
+                g_nPatterns = PATTERN_NUMBERS;
                 break;
             case R.id.btn_rearcamera:
-                setMetric4Camera(BigUtil.getrMetricLabels());
+                setMetric4Camera(BigUtil.getrMetricLabels(),PATTERN_NUMBERS1);
+                g_nPatterns = PATTERN_NUMBERS1;
                 break;
             case R.id.btn_open:
                 FileChooser fileChooser = new FileChooser(MainActivity.this, "Select img file", FileChooser.DialogType.SELECT_FILE, mSrcFile);
@@ -202,22 +204,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
                             int[] yPos = new int[PATTERN_NUMBERS];
 
                             int success = SharpnessEngine.getSharpnessValues(bitmapSrc, threshold, degree, xPos, yPos);
-                            DswLog.e(TAG, "### 3");
-                            drawBitmap(bitmapSrc, xPos, yPos, success);
+
+                            drawBitmap(bitmapSrc, xPos, yPos, g_nPatterns, success);
                             if (success == 0)
                             {
                                 mTxtResult.setText(String.format(""));
                                 Toast.makeText(getApplicationContext(), "Fail to parse the image context.", Toast.LENGTH_LONG).show();
                                 return;
                             }
-                            DswLog.e(TAG, "### 4");
-                            mTxtResult.setText(String.format("%d, %d, %d, %d, %d, %d, %d, %d, %d, %d, " +
-                                                             "%d, %d, %d, %d, %d, %d, %d, %d, %d, %d ",
-                                                            degree[0], degree[1], degree[2], degree[3],
-                                                            degree[4], degree[5], degree[6], degree[7],
-                                                            degree[8], degree[9], degree[10], degree[11],
-                                                            degree[12], degree[13], degree[14], degree[15],
-                                                            degree[16], degree[17], degree[18], degree[19]));
+
+                            String result = "";
+                            for (int i = 0; i < g_nPatterns; i++) {
+                                result += Integer.toString(degree[i]) + ", ";
+                            }
+                            mTxtResult.setText(result);
+
                         } catch (Exception e) {
                             e.printStackTrace();
                             DswLog.e(TAG, "### 5");
@@ -352,42 +353,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         Log.d("Touch Events ---------", sb.toString());
     }
 
-    private void drawBitmap(Bitmap src, int[] xPos, int[] yPos, int ret)
-    {
+    private void drawBitmap(Bitmap src, int[] xPos, int[] yPos, int nPatterns, int ret) {
         Bitmap bitmapDst = Bitmap.createBitmap(src.getWidth(), src.getHeight(), Bitmap.Config.ARGB_8888);
-        int bytes = src.getByteCount();
-        ByteBuffer buffer = ByteBuffer.allocate(bytes);
-        src.copyPixelsToBuffer(buffer);
-        byte[] imageBuf32 = buffer.array();
-        DswLog.e(TAG, "### B1");
-        //draw the line for sharp degree
-        boolean fVertical = src.getWidth() < src.getHeight();
+
+        Canvas canvas = new Canvas(bitmapDst);
+        Paint p = new Paint();
+        p.setAntiAlias(true);
+        p.setColor(Color.RED);
+        p.setStrokeWidth(2);
+        p.setStyle(Paint.Style.STROKE);
+        canvas.drawBitmap(src, new Matrix(), null);
         if (ret == 1) {
-            DswLog.e(TAG, "### B2");
-            for (int i = 0; i < PATTERN_NUMBERS; i++) {
-                int mod = fVertical ? (i % 2) - 1 : i % 2;
-                if (mod == 0) {
-                    for (int x = xPos[i] - DRAWABLE_OFFSET; x < xPos[i] + 2 * DRAWABLE_OFFSET; x++) {
-                        imageBuf32[(yPos[i] * bitmapDst.getWidth() + x) * 4] = (byte) 255;
-                        imageBuf32[(yPos[i] * bitmapDst.getWidth() + x) * 4 + 1] = 0;
-                        imageBuf32[(yPos[i] * bitmapDst.getWidth() + x) * 4 + 2] = 0;
-                        imageBuf32[(yPos[i] * bitmapDst.getWidth() + x) * 4 + 3] = -1;
-                    }
-                } else {
-                    for (int y = yPos[i] - DRAWABLE_OFFSET; y < yPos[i] + 2 * DRAWABLE_OFFSET; y++) {
-                        imageBuf32[(y * bitmapDst.getWidth() + xPos[i]) * 4] = (byte) 255;
-                        imageBuf32[(y * bitmapDst.getWidth() + xPos[i]) * 4 + 1] = 0;
-                        imageBuf32[(y * bitmapDst.getWidth() + xPos[i]) * 4 + 2] = 0;
-                        imageBuf32[(y * bitmapDst.getWidth() + xPos[i]) * 4 + 3] = -1;
-                    }
-                }
+            for (int i = 0; i < nPatterns; i++) {
+                canvas.drawCircle(xPos[i], yPos[i], 10, p);
             }
         }
         DswLog.e(TAG, "### B3");
-        bitmapDst.copyPixelsFromBuffer(ByteBuffer.wrap(imageBuf32));
-        DswLog.e(TAG, "### B4");
         mImageView.setImageBitmap(bitmapDst);
-        DswLog.e(TAG, "### B5");
     }
 
     private void stopAdjvService() {
@@ -402,9 +384,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
         startService(intent);
     }
 
-    private void setMetric4Camera(int[] label)
+    private void setMetric4Camera(int[] label, int nPatterns)
     {
-        int fSuccess = com.cydroid.tpicture.SharpnessEngine.setMetricLabels(label);
+        int fSuccess = SharpnessEngine.setMetricLabels(label, nPatterns);
         if ( fSuccess == 0)
         {
             Toast.makeText(getApplicationContext(), "Fail to set metric label.", Toast.LENGTH_LONG).show();

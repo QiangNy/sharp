@@ -29,8 +29,10 @@ public class BigUtil {
         switch (TestUtil.getCyZnVersion()) {
             case "CSW1703":
                 DswLog.d(TAG, "getrMetricLabels CSW1703");
-                return CSW1703.rMetricLabels;
 
+                //后摄只有16个参数
+                //return CSW1703.rMetricLabels;
+                return CSW1703.rMetricLabels_v2;
             default:
                 DswLog.d(TAG, "getrMetricLabels default");
                 return CSW1703.default_rMetricLabels;

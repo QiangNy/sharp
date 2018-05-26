@@ -167,7 +167,7 @@ public class BackAsyncTask extends AsyncTask {
             curCamId = pig.getCamerIntId();
             //get sn
             StringBuffer sb = new StringBuffer();
-            sb.append(sn).append(";");
+            sb.append(sub).append(";");
             //get picturepatch
             sb.append(pig.getPicPath()).append(";");
             //get camreia
@@ -222,7 +222,9 @@ public class BackAsyncTask extends AsyncTask {
             for (int m = 0; m < pig.getDegree().length; m++) {
 
                 if (pig.getCameraID().equals(BCamera1)) {
-                    cRelexLines = CSW1703.backRelexLines;
+                    //后置由20个值变为16个
+                    //cRelexLines = CSW1703.backRelexLines;
+                    cRelexLines = CSW1703.backRelexLines_v2;
                 }else {
                     cRelexLines = CSW1703.frontRelexLines;
                 }
@@ -294,11 +296,11 @@ public class BackAsyncTask extends AsyncTask {
         if(action.equals(OPEN_CAMERA_ONE)) {
             CameraID = BCamera1;
             CamreaIntId = 1;
-            rel = com.cydroid.tpicture.SharpnessEngine.setMetricLabels(BigUtil.getrMetricLabels());
+            rel = com.cydroid.tpicture.SharpnessEngine.setMetricLabels(BigUtil.getrMetricLabels(),16);
         }else {
             CameraID = Fcamera1;
             CamreaIntId = 2;
-            rel = com.cydroid.tpicture.SharpnessEngine.setMetricLabels(BigUtil.getfMetricLabels());
+            rel = com.cydroid.tpicture.SharpnessEngine.setMetricLabels(BigUtil.getfMetricLabels(),20);
         }
         DswLog.d(TAG, "getMetricLabels rel="+rel);
         //choose project

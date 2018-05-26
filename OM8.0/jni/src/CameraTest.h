@@ -11,7 +11,7 @@ extern	"C"
 {
 #endif
 
-int     setMetricLabels(int* pLabels);
+int     setMetricLabels(int* pLabels, int nUserRegions);
 int		getSharpness(const uchar* pbImg, int nWidth, int nHeight, float threshold, int* result, int* px, int* py);
 
 #ifdef __cplusplus
