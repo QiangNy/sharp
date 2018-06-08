@@ -5,9 +5,8 @@ LOCAL_PACKAGE_NAME := Cyee_SharpTest
 LOCAL_MODULE_TAGS := optional
 LOCAL_CERTIFICATE := platform
 
-LOCAL_PREBUILT_JNI_LIBS := \
-			libs/armeabi-v7a/libsharpness-jni.so
-
+LOCAL_PREBUILT_JNI_LIBS_arm64:= libs/arm64-v8a/libsharpness-jni.so
+LOCAL_PREBUILT_JNI_LIBS_arm:= libs/armeabi-v7a/libsharpness-jni.so
 LOCAL_SRC_FILES := $(call all-java-files-under, src)\
     src/cy/com/android/mmitest/service/INvRamService.aidl
 
